@@ -1,13 +1,13 @@
 import numpy as np
 
-def get_beam_dead_zone(echodata): 
+# def get_beam_dead_zone(echodata): 
 
-    echodata[np.isnan(echodata)] = 0
-    row_sums = np.mean(echodata, axis=1).tolist()
-    for i, row in enumerate(row_sums):
-        if row == row:
-            if row < (-50):
-                return i
+#     echodata[np.isnan(echodata)] = 0
+#     row_sums = np.mean(echodata, axis=1).tolist()
+#     for i, row in enumerate(row_sums):
+#         if row == row:
+#             if row < (-50):
+#                 return i
 
 
 def find_wave_smoothness(waves_list):

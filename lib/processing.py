@@ -26,26 +26,26 @@ def swap_chan(ds: xr.Dataset) -> xr.Dataset:
     )
 
 
-def extract_meta_data(path):
+# def extract_meta_data(path):
 
-    if '.raw' in path:
-        raw_echodata = ep.open_raw(path, sonar_model="EK80", use_swap=True)
+#     if '.raw' in path:
+#         raw_echodata = ep.open_raw(path, sonar_model="EK80", use_swap=True)
 
-    else:
-        raw_data_path = Path.cwd().joinpath(path)
-        for fp in raw_data_path.iterdir():
-            if fp.suffix == ".raw":
-                raw_echodata = ep.open_raw(fp, sonar_model='EK80')
-                break
-            else:
-                print("File not working, please provide a .raw file.")
+#     else:
+#         raw_data_path = Path.cwd().joinpath(path)
+#         for fp in raw_data_path.iterdir():
+#             if fp.suffix == ".raw":
+#                 raw_echodata = ep.open_raw(fp, sonar_model='EK80')
+#                 break
+#             else:
+#                 print("File not working, please provide a .raw file.")
     
-    channels = raw_echodata.platform.channel.to_numpy()
-    longitude = raw_echodata.platform.longitude.to_numpy()
-    latitude = raw_echodata.platform.latitude.to_numpy()
-    transmit_type = raw_echodata.beam.transmit_type.to_numpy()
+#     channels = raw_echodata.platform.channel.to_numpy()
+#     longitude = raw_echodata.platform.longitude.to_numpy()
+#     latitude = raw_echodata.platform.latitude.to_numpy()
+#     transmit_type = raw_echodata.beam.transmit_type.to_numpy()
 
-    return raw_echodata, channels, longitude, latitude, transmit_type
+#     return raw_echodata, channels, longitude, latitude, transmit_type
 
 def process_data(path, env_params, cal_params, bin_size, waveform, ping_time_bin='2S'):
     """
@@ -83,61 +83,61 @@ def clean_times(ping_times, nan_indicies):
     mask = np.ones(ping_times.shape, dtype=bool)
     mask[nan_indicies] = False
 
-    # Använd masken för att ta bort värden från ping_times
+   # Use the mask to remove values from ping_times
     ping_times = ping_times[mask]
 
     return ping_times
 
 
 def remove_vertical_lines(echodata):
-    # Hitta indexen för arrayerna som bara innehåller NaN
+    # Find the indices of the arrays that contain only NaN
     nan_indices = np.isnan(echodata).all(axis=1)
     indices_to_remove = np.where(nan_indices)[0]
 
-    # Ta bort arrayerna med NaN-värden från din ursprungliga array
+    # Remove the arrays containing NaN values from your original array
     echodata = echodata[~nan_indices]
 
     return echodata, indices_to_remove
 
-def get_interpolated_gps(path, frequency=1):
-    """
-    Interpolates coordinates
+# def get_interpolated_gps(path, frequency=1):
+#     """
+#     Interpolates coordinates
 
-    Args: 
-        path (str): The path to gps.csv file  
-        frequency (int) : The frequency of interpolation in seconds
+#     Args: 
+#         path (str): The path to gps.csv file  
+#         frequency (int) : The frequency of interpolation in seconds
 
-    Returns: 
-        pd.DataFrame: A DataFrame with interpolated coordinates and time
-    """
+#     Returns: 
+#         pd.DataFrame: A DataFrame with interpolated coordinates and time
+#     """
     
-    print('Loading and interpolating coordinates...')
-    df = pd.read_csv(path)
-    df['Time'] = df['GPS_date'] + ' ' + df['GPS_time']
+#     print('Loading and interpolating coordinates...')
+#     df = pd.read_csv(path)
+#     df['Time'] = df['GPS_date'] + ' ' + df['GPS_time']
 
-    # drop rows with undesirable years
-    df['GPS_date'] = df['GPS_date'].astype('datetime64[ns]')
-    df['Year'] = df['GPS_date'].dt.year
-    df = df[df.Year == 2023]
-    df.reset_index(inplace=True)
-    df = df.drop(columns=['GPS_date', 'GPS_time', 'Year', 'index', 'Survey'])
-    df = df[~df.Time.duplicated()]
-    print(df)
+#     # drop rows with undesirable years
+#     df['GPS_date'] = df['GPS_date'].astype('datetime64[ns]')
+#     df['Year'] = df['GPS_date'].dt.year
+#     df = df[df.Year == 2023]
+#     df.reset_index(inplace=True)
+#     df = df.drop(columns=['GPS_date', 'GPS_time', 'Year', 'index', 'Survey'])
+#     df = df[~df.Time.duplicated()]
+#     print(df)
 
-    # convert the times column
-    df['Time'] = pd.to_datetime(df['Time'])
-    df['Time'] = pd.to_datetime((df['Time'].astype(np.int64)).astype('datetime64[ns]'))
+#     # convert the times column
+#     df['Time'] = pd.to_datetime(df['Time'])
+#     df['Time'] = pd.to_datetime((df['Time'].astype(np.int64)).astype('datetime64[ns]'))
 
-    # new range (once a second), resample and interpolate
-    new_range = pd.date_range(df.Time[0], df.Time.values[-1], freq=str(frequency)+'S')
-    interpolated_df = df.set_index('Time').reindex(new_range).interpolate().reset_index()
-    interpolated_df.rename(columns= {'index' : 'Datetime'}, inplace=True)
-    interpolated_df['Longitude'] = interpolated_df['Longitude'].apply(lambda x: round(x, 5))
-    interpolated_df['Latitude'] = interpolated_df['Latitude'].apply(lambda x: round(x, 5))
+#     # new range (once a second), resample and interpolate
+#     new_range = pd.date_range(df.Time[0], df.Time.values[-1], freq=str(frequency)+'S')
+#     interpolated_df = df.set_index('Time').reindex(new_range).interpolate().reset_index()
+#     interpolated_df.rename(columns= {'index' : 'Datetime'}, inplace=True)
+#     interpolated_df['Longitude'] = interpolated_df['Longitude'].apply(lambda x: round(x, 5))
+#     interpolated_df['Latitude'] = interpolated_df['Latitude'].apply(lambda x: round(x, 5))
 
-    print('Coords loaded successfully!')
+#     print('Coords loaded successfully!')
 
-    return interpolated_df
+#     return interpolated_df
 
 def get_interpolated_gps2(path, ltz, frequency=2):
     """
@@ -189,56 +189,56 @@ def get_interpolated_gps2(path, ltz, frequency=2):
     return result_df
 
 
-def download_posi(df1,df2):
-    """
-    Args : 
-        df1 : the output dataframe without the postion infos of longitude and latitude
-        df2 : the csv file contains the position infos of longitude and latitude
-    Returns:
-        df1 after having position infos added
-    """
-    df2['time'] = pd.to_datetime(df2['time'])   # importante change dtype
+# def download_posi(df1,df2):
+#     """
+#     Args : 
+#         df1 : the output dataframe without the postion infos of longitude and latitude
+#         df2 : the csv file contains the position infos of longitude and latitude
+#     Returns:
+#         df1 after having position infos added
+#     """
+#     df2['time'] = pd.to_datetime(df2['time'])   # importante change dtype
 
-    # Merge DataFrames on the 'time' column
-    merged_df = pd.merge(df1, df2[['time', 'Longitude', 'Latitude','Velocity']], on='time', how='left')
+#     # Merge DataFrames on the 'time' column
+#     merged_df = pd.merge(df1, df2[['time', 'Longitude', 'Latitude','Velocity']], on='time', how='left')
 
-    # Update the 'Longitude' and 'Latitude' columns in df1
-    merged_df['Latitude'] = np.where(pd.isna(merged_df['Latitude_x']), merged_df['Latitude_y'], merged_df['Latitude_x'])
-    merged_df['Longitude'] = np.where(pd.isna(merged_df['Longitude_x']), merged_df['Longitude_y'], merged_df['Longitude_x'])
-    merged_df['Velocity'] = np.where(pd.isna(merged_df['Velocity_x']), merged_df['Velocity_y'], merged_df['Velocity_x'])
-    df1.loc[:, 'Longitude'] = merged_df['Longitude']
-    df1.loc[:,'Latitude'] = merged_df['Latitude']
-    df1.loc[:,'Velocity'] = merged_df['Velocity']
-
-
-def haversine(lat1, lon1, lat2, lon2):
-    # Convert latitude and longitude from degrees to radians
-    lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
-
-    # Haversine formula
-    dlat = lat2 - lat1
-    dlon = lon2 - lon1
-    a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
-    c = 2 * atan2(sqrt(a), sqrt(1 - a))
-    # 6371.0 Radius of the Earth in kilometers (you can adjust this value)
-    distance = 6371.0 * c  
-
-    return distance
+#     # Update the 'Longitude' and 'Latitude' columns in df1
+#     merged_df['Latitude'] = np.where(pd.isna(merged_df['Latitude_x']), merged_df['Latitude_y'], merged_df['Latitude_x'])
+#     merged_df['Longitude'] = np.where(pd.isna(merged_df['Longitude_x']), merged_df['Longitude_y'], merged_df['Longitude_x'])
+#     merged_df['Velocity'] = np.where(pd.isna(merged_df['Velocity_x']), merged_df['Velocity_y'], merged_df['Velocity_x'])
+#     df1.loc[:, 'Longitude'] = merged_df['Longitude']
+#     df1.loc[:,'Latitude'] = merged_df['Latitude']
+#     df1.loc[:,'Velocity'] = merged_df['Velocity']
 
 
-def cut_zone(time):
-    """
-    Args time: 
-        a str of a date time consisted by 'the time part'  +  '+' + additional part
+# def haversine(lat1, lon1, lat2, lon2):
+#     # Convert latitude and longitude from degrees to radians
+#     lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
+
+#     # Haversine formula
+#     dlat = lat2 - lat1
+#     dlon = lon2 - lon1
+#     a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
+#     c = 2 * atan2(sqrt(a), sqrt(1 - a))
+#     # 6371.0 Radius of the Earth in kilometers (you can adjust this value)
+#     distance = 6371.0 * c  
+
+#     return distance
+
+
+# def cut_zone(time):
+#     """
+#     Args time: 
+#         a str of a date time consisted by 'the time part'  +  '+' + additional part
         
-    Returns:
-        cutoff the "+11:00" in time formate.
+#     Returns:
+#         cutoff the "+11:00" in time formate.
 
-    """
-    # split the time part + additional part
-    time_str = str(time)
-    parts = time_str.split('+')
-    [d_time,d_plus] = parts
-    d_utc = pd.to_datetime(d_time)
+#     """
+#     # split the time part + additional part
+#     time_str = str(time)
+#     parts = time_str.split('+')
+#     [d_time,d_plus] = parts
+#     d_utc = pd.to_datetime(d_time)
     
-    return pd.to_datetime(d_utc)
+#     return pd.to_datetime(d_utc)

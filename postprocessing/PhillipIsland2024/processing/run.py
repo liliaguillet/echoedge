@@ -26,10 +26,10 @@ warnings.filterwarnings("ignore")
 with open('../PI_parameters.yaml', 'r') as f:
     params = list(yaml.load_all(f, Loader=SafeLoader))
 
-csv_path = "F:/SURVEY2024/PREPROCESS_DATA/Csv"
-img_path = "F:/SURVEY2024/PREPROCESS_DATA/Img"
-npy_path = "F:/SURVEY2024/PREPROCESS_DATA/npy"
-files_path = "F:/SURVEY2024/SURVEY RAW DATA/Files" #2023 path
+csv_path = "F:/SURVEY2025/PREPROCESS_DATA/Csv"
+img_path = "F:/SURVEY2025/PREPROCESS_DATA/Img"
+npy_path = "F:/SURVEY2025/PREPROCESS_DATA/npy"
+files_path = "F:/SURVEY2025/SURVEY RAW DATA/Test" #2023 path
 # files_p = pd.read_csv('../../../test/Rerun/Rerun_files.csv')
 # files = files_p['raw_list']
 

@@ -15,264 +15,11 @@ import pickle
 from skimage.transform import rescale
 from skimage.filters import threshold_multiotsu,threshold_mean,threshold_otsu
 
-from Double_thresh_function import npy_correction_v3,convergence_test_new20240730,find_original_position,find_edges,find_center_square,parameters_correction
-
-
-
-
-#######################################################################################################################################################
-################### STEP 1 : Define a function to obtain schools description ##########################################################################
-#######################################################################################################################################################
-
-def thresh_info_new20240806(dest_path,criteria_table,file,thresh_index,npy_path):  
-    """
-    Parameters:
-    1 - dest_path: Path to save the output images and tables.
-    2 - criteria_table: The table containing the information (thresh_max, thresh_min, and the mask used for the images, etc.) of all the images with 
-        convergence = 1, 2.
-    3 - file: The resized file name, ending with the format '.npy'.
-    4 - thresh_index: Helps choose the thresh_min by different criteria. Here, (1: by criterion mean_c1, 2: mean_c2, 3: min_c1, 4: min_c2).
-
-    Returns:
-    1 - file_info: Information about fish schools (to be saved in a pkl file).
-    2 - new_row_table: Information by files or by images (to be generated as a CSV table).
-    3 - centroid_file: All the (weighted) centroids of fish schools in the image.
-    """
-
-    if file not in criteria_table['file'].values:
-        print(f"File {file} not found in the criteria table.")
-        return
-    ## thresh_index : choosing different thresh_min by different critere, 1:mean_c1, 2:mean_c2 , 3:min_c1, 4:min_c2
-
-    # Read values from criteria_table
-    matched_row = criteria_table.loc[criteria_table['file'] == file]
-    thresh_max = matched_row['thresh_max'].values[0]
-    nbr_school = matched_row['nbr_school'].values[0]
-    shape_top_desc = matched_row['shape_top_desc'].values[0]        # 1 : new mask
-    shape_bottom_desc = matched_row['shape_bottom_desc'].values[0]
-    first_lines = matched_row['total_rows'].values[0]
-    
-    if shape_top_desc == "rectangle(80,20)":
-        shape_top = rectangle(80,20)
-    else:
-        shape_top= rectangle(130,20)
-
-    if shape_bottom_desc == "rectangle(10,20)":
-        shape_bottom = rectangle(10,20)
-    else:
-        shape_bottom = rectangle(20,10)
-
-    if thresh_index == 1:
-        thresh_min = matched_row['mean_c1'].values[0]
-    elif thresh_index == 2:
-        thresh_min = matched_row['mean_c2'].values[0]
-    elif thresh_index == 3:
-        thresh_min = matched_row['min_c1'].values[0]
-    elif thresh_index == 4:
-        thresh_min = matched_row['min_c2'].values[0]
-    else :
-        print("Choose the right critere: 1 for mean_c1, 2 for mean_c2, 3 for min_c1,4 for min_c2")
-        return
-    
-    img = np.load(os.path.join(npy_path,file))    
-    width_image = img.shape[1]
-    height_image = img.shape[0]
-    
-    # Get the corrected image  
-    im = npy_correction_v3(img,first_lines,shape_top,shape_bottom)    # 1 : top_shape + bottom_shape
-
-    regions_max = np.digitize(im, bins=[thresh_max])
-    regions_max[im.mask] = 0
-    region_min = np.digitize(im, bins=[thresh_min])
-    region_min[im.mask] = 0
-        
-    im_recon = reconstruction(regions_max, region_min, method='dilation')
-    label_img = label(im_recon)
-    regions_all = regionprops(label_img,intensity_image=img)
-    # regions_all = regionprops(label_img)                       #            change!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    regions = [region for region in regions_all if region.area > 1]
-
-    # Initialising the output variables
-    label_file = []     # class 1
-    bbox_file = []       
-    width_length_file = []  
-    axis_ellipse_file = []  #  major , minor
-    perimeter_file = []
-    size_file = []      
-    is_very_wide_s = []
-    is_very_tall_s = []
-    dis_to_surface_s = []   
-
-    intensity_school = []    # class 2 
-    intensity_img = [np.mean(img[img!=0]),np.min(img),np.max(img[img!=0])]
-    dif_intensity_s_i = []
-
-    center_square_intensity_file = []    
-    edges_school_intensity_file = [] 
-    dif_intensity_center_edges_file  = []
-    std_intensity_school_file  = []
-    gradient_school_file = []    
-    gradient_school_center_file = []
-    gradient_school_edges_file = []
-    dif_gradient_center_edges_file = []
-
-    width_length_ratio_file = []    # class 3   elongation 
-    axis_ellipse_ratio_file = []  #  short / long   eccentricity 
-    solidity_file = []
-    compactness_file = []
-    inertia_tensor_eigvals_ratio_file = []   
-    perimeter_area_ratio_file = []
-
-    centroid_file = []    # file class 4
-    centroid_weighted_file = []
-    depth_file = []     
-    coords_file = []  
-
-    edges_school_file = []  # file class 5
-    center_square_file = []
-    min_intensity = []
-
-    plt.imsave(f'{dest_path}/{file[:-4]}_double.png',im_recon)
-
-    for region in  regions:
-        coords = region.coords
-        
-        y_coords = coords[:, 0]
-        x_coords = coords[:, 1]
-        bbox = region.bbox
-
-        dis_to_surface = bbox[0]
-        is_very_wide = 1 if (bbox[3]-bbox[1])>width_image/2 else 0
-        is_very_tall = 1 if (bbox[2]-bbox[0])>height_image/2 else 0
-
-        # Calculate the average coordinates
-        avg_0 = sum(coord[0] for coord in coords) / len(coords)
-        avg_1 = sum(coord[1] for coord in coords) / len(coords)
-        # center_file.append([avg_0,avg_1])
-
-        intensities = [img[coord[0], coord[1]] for coord in coords]
-        max_index = np.argmax(intensities)
-        max_intensity_coords = coords[max_index]
-        
-        min_intensity = np.min(intensities)
-
-        edges_school = find_edges(im_recon, y_coords, x_coords)
-        center_square = find_center_square(max_intensity_coords, region.coords)  # use max_intensity_coords not center
-        center_square_intensity =  np.mean([img[coord[0], coord[1]] for coord in center_square])
-        edges_school_intensity =  np.mean([img[coord[0], coord[1]] for coord in edges_school])
-        dif_intensity_center_edges = center_square_intensity - edges_school_intensity
-        std_intensity_school = np.std([img[coord[0], coord[1]] for coord in coords])
-
-        gradient_y, gradient_x = np.gradient(coords)
-        gradient_magnitude = np.sqrt(gradient_x**2 + gradient_y**2)
-        gradient_school = np.mean(gradient_magnitude)
-        gradient_y_center, gradient_x_center = np.gradient(center_square)
-        gradient_magnitude_center = np.sqrt(gradient_x_center**2 + gradient_y_center**2)
-        gradient_school_center = np.mean(gradient_magnitude_center)
-        gradient_y_edges, gradient_x_edges = np.gradient(edges_school)
-        gradient_magnitude_edges = np.sqrt(gradient_x_edges**2 + gradient_y_edges**2)
-        gradient_school_edges = np.mean(gradient_magnitude_edges)
-        dif_gradient_center_edges = abs(gradient_school_center - gradient_school_edges)
-
-        centroid_file.append(region.centroid)
-        centroid_weighted_file.append(region.centroid_weighted)
-        label_file.append(region.label)
-        bbox_file.append(region.bbox)
-        width_length_file.append([region.bbox[3]-region.bbox[1],region.bbox[2]-region.bbox[0]])
-        axis_ellipse_file.append([region.axis_major_length,region.axis_minor_length])
-        perimeter_file.append(region.perimeter)
-        size_file.append(region.area)
-        is_very_wide_s.append(is_very_wide)
-        is_very_tall_s.append(is_very_tall)
-        dis_to_surface_s.append(dis_to_surface)
-        intensity_school.append([np.mean(img[y_coords, x_coords]),np.min(img[y_coords, x_coords]),np.max(img[y_coords, x_coords])])
-        dif_intensity_s_i.append(np.mean(intensities) - intensity_img[0])
-
-        center_square_intensity_file.append(center_square_intensity)
-        edges_school_intensity_file.append(edges_school_intensity)
-        dif_intensity_center_edges_file.append(dif_intensity_center_edges)
-        std_intensity_school_file.append(std_intensity_school)
-        gradient_school_file.append(gradient_school)    
-        gradient_school_center_file.append(gradient_school_center)
-        gradient_school_edges_file.append(gradient_school_edges)
-        dif_gradient_center_edges_file.append(dif_gradient_center_edges)
-        width_length_ratio_file.append((region.bbox[3]-region.bbox[1])/(region.bbox[2]-region.bbox[0]))
-    
-        axis_ellipse_ratio = region.axis_minor_length / region.axis_major_length
-      
-        
-        axis_ellipse_ratio_file.append(axis_ellipse_ratio)
-        solidity_file.append(region.solidity)
-        compactness_file.append(4*math.pi*(region.area)/(region.perimeter**2))
-        inertia_tensor_eigvals_ratio_file.append(region.inertia_tensor_eigvals[1]/region.inertia_tensor_eigvals[0])
-        perimeter_area_ratio_file.append(region.perimeter/region.area)
-
-        coords_file.append(region.coords)
-        depth_file.append(avg_0/10)
-        edges_school_file.append(edges_school)
-        center_square_file.append(center_square)
-    y_all = np.dot(size_file, [coord[0] for coord in centroid_file]) / np.sum(size_file)
-    x_all = np.dot(size_file, [coord[1] for coord in centroid_file]) / np.sum(size_file)
-    
-    if not intensity_school:
-        print("intensity school :",intensity_school)
-        print(file)                       
-    intensity_school_array = np.vstack(intensity_school)
-    mean_intensity_school = np.dot(size_file, intensity_school_array[:,0])/np.sum(size_file)
-    
-    
-    file_info = {"label":label_file,
-                "size":size_file,
-                "bbox":bbox_file,
-                "depth":depth_file,
-                "center":centroid_file,
-                "width_length":width_length_file,
-                "is_very_wide":is_very_wide_s,
-                "is_very_tall":is_very_tall_s,
-                'dis_to_surface':dis_to_surface_s,
-                "axis_ellipse": axis_ellipse_file,
-                "perimeter_school": perimeter_file,
-                "intensity_school":intensity_school,
-                "dif_intensity_school_image": dif_intensity_s_i,
-                "intensity_img":intensity_img,
-                "center_square_intensity":center_square_intensity_file, 
-                "edges_school_intensity":edges_school_intensity_file,
-                "dif_intensity_center_edges":dif_intensity_center_edges_file,
-                "std_intensity_school":std_intensity_school_file,
-                "gradient_school":gradient_school_file,
-                "gradient_school_center":gradient_school_center_file,
-                "gradient_school_edges":gradient_school_edges_file,
-                "dif_gradient_center_edges":dif_gradient_center_edges_file,
-                "width_length_ratio":width_length_ratio_file,
-                "axis_ellipse_ratio":axis_ellipse_ratio_file,
-                "solidity":solidity_file,
-                "compactness":compactness_file,
-                "inertia_tensor_eigvals_ratio":inertia_tensor_eigvals_ratio_file,
-                "perimeter_area_ratio":perimeter_area_ratio_file,
-                "coords":coords_file,
-                "nbr_school":len(label_file),
-                "total_area":sum(size_file),
-                "mean_intensity_school":mean_intensity_school,
-                "center_all":[y_all,x_all],     #[row,column]
-                "mean_depth":y_all/10,
-                "thresh_max":thresh_max,
-                "thresh_min":thresh_min,
-                'min_intensity': min_intensity}
-    new_row_table = {'file':file, 
-                'nbr_school':len(label_file), 
-                'thresh_max':thresh_max, 
-                'thresh_min':thresh_min,
-                'all_size':sum(size_file),
-                'mean_intensity_school':mean_intensity_school,
-                'mean_depth':y_all/10,
-                'mean_intensity_imgwithout0':np.mean(img[img!=0]), 
-                'min_intensity': min_intensity} 
-    return file_info ,new_row_table,centroid_file
-
+from Double_thresh_function import npy_correction_v3,convergence_test_new20240730,find_original_position,find_edges,find_center_square,parameters_correction,thresh_info_new20240806
 
 
 #######################################################################################################################################################
-#################################### STEP 2 : Get thresh_max and thresh_min ###########################################################################
+#################################### STEP 1 : Get thresh_max and thresh_min ###########################################################################
 #######################################################################################################################################################
 
 #####  version time 20240805
@@ -282,11 +29,11 @@ warnings.filterwarnings("ignore", category=RuntimeWarning)
 warnings.filterwarnings("ignore", category=FutureWarning)
 
 ###################################               path part                   ###################################  
-npy_path = "F:/SURVEY2023/PREPROCESS_DATA/Resize_img"               #  Path where the resized .npy files are stored
-dest_path_max = "F:/SURVEY2023/DOUBLE THRESHOLDING/Thresh_max"    # Path to save the thresh_max curve
-dest_path_min = "F:/SURVEY2023/DOUBLE THRESHOLDING/Thresh_min"    # Path to save the thresh_min curve
-csv_path = "F:/SURVEY2023/PREPROCESS_DATA/Csv"                   #  Path where the original .csv files are stored
-dest_path_dt = "F:/SURVEY2023/DOUBLE THRESHOLDING/Schools"   # path to save the double threshold output images
+npy_path = "F:/SURVEY2025/PREPROCESS_DATA/Resize_img"               #  Path where the resized .npy files are stored
+dest_path_max = "F:/SURVEY2025/DOUBLE THRESHOLDING/Thresh_max"    # Path to save the thresh_max curve
+dest_path_min = "F:/SURVEY2025/DOUBLE THRESHOLDING/Thresh_min"    # Path to save the thresh_min curve
+csv_path = "F:/SURVEY2025/PREPROCESS_DATA/Csv"                   #  Path where the original .csv files are stored
+dest_path_dt = "F:/SURVEY2025/DOUBLE THRESHOLDING/Schools"   # path to save the double threshold output images
 mapping_path = npy_path                 #  Path where the mapping_info.pkl file is stored
 ###################################            end of path part               ###################################  
 
@@ -521,7 +268,7 @@ criteria_table.to_csv(f'{dest_path_min}/criteria_table.csv', index=False)
 
 
 #######################################################################################################################################################
-#################################### STEP 3 : Generate the double threshold images ####################################################################
+#################################### STEP 2 : Generate the double threshold images ####################################################################
 #######################################################################################################################################################
 
 
