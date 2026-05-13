@@ -18,9 +18,9 @@ from Double_thresh_function import resize_matrix_31052024
 
 # PATH ##############################################################
 
-csv_path = "D:/SURVEY2025/PREPROCESS_DATA/Csv"
-npi_path = "D:/SURVEY2025/PREPROCESS_DATA/npy"
-dest_path = "D:/SURVEY2025/PREPROCESS_DATA/Resize"
+csv_path = "F:/SURVEY2025/PREPROCESS_DATA/Csv"
+npi_path = "F:/SURVEY2025/PREPROCESS_DATA/npy"
+dest_path = "F:/SURVEY2025/PREPROCESS_DATA/Resize"
 
 ###############################################################
 # Check if the directory exists

@@ -29,7 +29,7 @@ warnings.filterwarnings("ignore", category=RuntimeWarning)
 warnings.filterwarnings("ignore", category=FutureWarning)
 
 ###################################               path part                   ###################################  
-npy_path = "F:/SURVEY2025/PREPROCESS_DATA/Resize_img"               #  Path where the resized .npy files are stored
+npy_path = "F:/SURVEY2025/PREPROCESS_DATA/Resize"               #  Path where the resized .npy files are stored
 dest_path_max = "F:/SURVEY2025/DOUBLE THRESHOLDING/Thresh_max"    # Path to save the thresh_max curve
 dest_path_min = "F:/SURVEY2025/DOUBLE THRESHOLDING/Thresh_min"    # Path to save the thresh_min curve
 csv_path = "F:/SURVEY2025/PREPROCESS_DATA/Csv"                   #  Path where the original .csv files are stored

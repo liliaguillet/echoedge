@@ -11,7 +11,7 @@ Start by checking your current environment, our configurations are shown below. 
 
 ##### Start by cloning the git repo
 ```
-git clone https://github.com/balticseabird/echoedge
+git clone https://github.com/liliaguillet/echoedge.git
 cd echoedge
 ```
 
@@ -27,20 +27,14 @@ pip3 install -e . # install library for this repo
 ## Structure
 ```
 echoedge/
-├── edge/
-│   ├── sailor/
-│   └── svea/
+├── lib/
 ├── postprocessing/
-│   ├── SPRAS_2024/
 │   └── subfolder-per-survey/
-├── src/
-│    ├── serial_communication/
-│    ├── processing.py
-│    ├── find_fish.py
-│    └── visualization.py
+├── test/
 ├── .gitignore
 ├── requirements.txt
 └── README.md
+
 ```
 
 

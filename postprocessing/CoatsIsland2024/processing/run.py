@@ -13,12 +13,12 @@ from pathlib import Path
 
 from yaml.loader import SafeLoader
 
-from processing import process_data, extract_meta_data, remove_vertical_lines, clean_times, get_interpolated_gps2
+from processing import process_data,  remove_vertical_lines, clean_times, get_interpolated_gps2
 from find_bottom import get_beam_dead_zone, find_bottom
 from find_fish import find_fish_median, medianfun
 from find_waves import find_waves, find_layer
 from visualization import data_to_images
-from export_data import save_data, shorten_list
+from export_data import save_data
 
 warnings.filterwarnings("ignore")
 
