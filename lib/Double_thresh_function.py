@@ -14,23 +14,17 @@ from astral.sun import sun
 import datetime
 
 ########################################   list of functions  ########################################
-#  line : 32        apply_day_or_night(row)               (not used in the key code part)
-#  line : 36        convergence_test_new20240730(arr)      (to test the convergence of the images)
-#  line : 84        day_or_night(coords,timezone,time)      (not used in the key code part)
-#  line : 122       find_center_square(centroid, coords)      (get the square 3*3 centered by a choosen pixel)  
-#  line : 139       find_edges(image, row, col)
-#  line : 178       find_first_incolumns(matrix,element)       (not used in the key code part)
-#  line : 195       find_minimum_dis(matrix2,matrix1)        
-#  line : 214       find_original_position(resized_pixel, intervals)
-#  line : 227       inter_positions_new(arr)
-#  line : 244       npy_correction_v3(img,total_rows,shape_top,shape_bottom)
+#  line : 30        convergence_test_new20240730(arr)      (to test the convergence of the images)
+#  line : 81        find_center_square(centroid, coords)      (get the square 3*3 centered by a choosen pixel)  
+#  line : 98        find_edges(image, row, col)      
+#  line : 136       find_original_position(resized_pixel, intervals)
+#  line : 149       inter_positions_new(arr)
+#  line :        npy_correction_v3(img,total_rows,shape_top,shape_bottom)
 #  line : 280       parameters_correction(img,median_sea_depth,threshold = -30)          
 #  line : 335       resize_matrix_31052024(matrix,velocity,meanvelocity)
+#  line :           thresh_info_new20240806
+#  line : 546       sam_info   
 ########################################   end of list        ########################################
-
-# # Define a helper function to apply the function day_or_night(coords,timezone,time) to a dataframe
-# def apply_day_or_night(row):
-#     return day_or_night(row['gps_lon_lat'], 'Australia/Melbourne', row['time'])
 
 
 def convergence_test_new20240730(arr):
@@ -84,48 +78,13 @@ def convergence_test_new20240730(arr):
     return max_start_index, max_end_index, arr[max_start_index],convergence
 
 
-# def day_or_night(coords,timezone,time):
-#     # Remove the square brackets
-#     coordinates_str = coords.strip("[]")
-
-#     # Split the string by comma to get a list of strings
-#     coordinates_list_str = coordinates_str.split(",")
-
-#     # Convert the list of strings to a list of floats
-#     coordinates = [float(coord) for coord in coordinates_list_str]
-
-#     # Access the first and second numbers
-#     lon = coordinates[0]
-#     lat = coordinates[1]
-
-#     loc = LocationInfo(name='Melbourne', region='Australia', timezone=timezone,
-#                    latitude=lat, longitude=lon)
-
-#     # Convert the string to a datetime object
-#     date_datetime = parser.isoparse(time)
-#     year = date_datetime.year
-#     month = date_datetime.month
-#     day = date_datetime.day
-  
-#     s = sun(loc.observer, date=datetime.date(year,month,day), tzinfo=loc.timezone)
-#     sunrise_time = s['sunrise']
-#     sunset_time = s['sunset']
-
-#     # Format the sunrise and sunset times
-#     sunrise_str = sunrise_time.strftime('%Y-%m-%d %H:%M:%S %Z')
-#     sunset_str = sunset_time.strftime('%Y-%m-%d %H:%M:%S %Z')
-
-#     if sunrise_time < date_datetime < sunset_time :
-#         return 1,sunrise_str,sunset_str
-#     else:
-#         return 0,sunrise_str,sunset_str
-
-
-
 def find_center_square(centroid, coords):
     """
-    Get the square of the center in the image: get the square 3*3 centered by a choosen pixel
+    Get the square of the center in the fish school: get the square 3*3 centered by a choosen pixel
     
+    Args: 
+        centroid
+        coords of the fish school
     """
     int_centroid = np.round(centroid).astype(int)
     square_matrice = [[int_centroid[0]-1,int_centroid[1]-1],[int_centroid[0]-1,int_centroid[1]],[int_centroid[0]-1,int_centroid[1]+1],\
@@ -177,44 +136,17 @@ def find_edges(image, row, col):
     return edges_object
 
 
-
-# def find_first_incolumns(matrix,element): 
-#     # find the element position in each columne
-#     coords = np.argwhere(matrix == element)
-#     coords_r = coords[:, 0]
-#     coords_c = coords[:, 1]
-#     column_count = []
-#     first_postion = []
-#     last_postion = []
-#     for i in np.unique(coords_c):
-#         coords_f = [coord[0] for coord in coords if coord[1] == i]
-#         first_postion.append(np.min(coords_f))
-#         last_postion.append(np.max(coords_f))
-#         column_count.append(i)
-#     return column_count,first_postion,last_postion
-
-
-
-# def find_minimum_dis(matrix2,matrix1):
-#     # matrix2 to matrix1 
-#     column_count1,first_postion1,last_postion1 = find_first_incolumns(matrix1,False)
-#     column_count2,first_postion2,last_postion2 = find_first_incolumns(matrix2,True)
-    
-#     distance_top = []
-#     distance_bottom = []
-#     for i in range(0,len(column_count2)):
-#         index1 = np.where(np.array(column_count1) == column_count2[i])[0]
-#         index1 = index1[0]
-#         # print('i,index1',i,index1,'top_f,m_top_t',first_postion1[index1],first_postion2[i],first_postion2[i]-first_postion1[index1])
-#         # print('i,index1',i,index1,'bot_f,m_bot_t',last_postion1[index1],last_postion2[i],last_postion1[index1]-last_postion2[i])
-#         distance_top.append(first_postion2[i]-first_postion1[index1])
-#         distance_bottom.append(last_postion1[index1]-last_postion2[i])
-#     # print(np.min(distance_bottom),np.min(distance_top))
-#     return np.min(distance_top),np.min(distance_bottom)
-
-
-
 def find_original_position(resized_pixel, intervals):
+    """
+    Get the school position in original file (before resize)
+
+    Parameters:
+    - resized_pixel: the school
+    - intervals : interval define during the resize procedure (mapping_info)
+
+    Returns:
+    - the original position of the school pixel in the original file
+    """
     for (orig_start, orig_end, resized_start, resized_end) in intervals:
         if resized_start <= resized_pixel < resized_end:
             # Calculate the scaling factor for this segment
@@ -228,6 +160,14 @@ def find_original_position(resized_pixel, intervals):
 
 
 def inter_positions_new(arr):
+    """
+    Get the position of the division depending of the velocity
+    Parameters:
+    -Arr : velocity
+    Returns:
+    - Position of the division
+    """   
+    
     segments = []
     arr_unique = [arr[0]]
     for i in range(1,len(arr)):
@@ -621,244 +561,26 @@ def thresh_info_new20240806(dest_path,criteria_table,file,thresh_index,npy_path)
     return file_info ,new_row_table,centroid_file
 
 
-##############################################################################################
-##############                       version time  20250702                     ##############
-##############################################################################################
-def sam_info(file,sam_result,npy_path,csv_path,dest_path):    # version time : 20240806
-    # Step 1 : change the file name to get the corresponding name in sam result
-    file_npy =file[:-4]+'.npy'
-
-    # Step 2 : load the image from original directionary + mask
-    img = np.load(os.path.join(npy_path,file_npy))
-    csv_name = file.replace('_new.png','.csv')
-    csv_table = pd.read_csv(os.path.join(csv_path,csv_name))
-    bottom = int(csv_table['depth'].median()*10)
-   
-    length_limit = bottom *0.62
-    size_limit = bottom*img.shape[1]*0.5            #  2 : bigger than before = 0.42
-    nomal_limit = bottom*img.shape[1]*0.1
-
-    # Step 3 : find the corrections parameters
-    shape_top,shape_bottom,first_lines,shape_top_desc,shape_bottom_desc = parameters_correction(img,bottom,threshold = -30)
-   
-    # Step 4 : get the mask 
-
-    im = npy_correction_v3(img,first_lines,shape_top,shape_bottom)           # 1 : new mask
-    mask = im.mask
-    
-    dis_limit = 10
-    dis_check = 50 # width limit
-    width_image = img.shape[1]
-    height_image = img.shape[0]
-
-    # Step 5 : Initialising the output variables
-    label_file = []     # class 1
-    bbox_file = []       
-    width_length_file = []  
-    axis_ellipse_file = []  #  major , minor
-    perimeter_file = []
-    size_file = []      
-    is_very_wide_s = []
-    is_very_tall_s = [] 
-    dis_level_s = []  
-    dis_to_surface_s = []  
-    dis_to_bottom_s = []   
-
-    intensity_school = []    # class 2 
-    intensity_img = [np.mean(img[img!=0]),np.min(img),np.max(img[img!=0])]
-    intensity_c_img_mask = np.mean(im[~mask])                                       # 2: use corrected img intensity
-
-    dif_intensity_s_i = []
-    center_square_intensity_file = []    
-    edges_school_intensity_file = [] 
-    dif_intensity_center_edges_file  = []
-    std_intensity_school_file  = []
-    gradient_school_file = []    
-    gradient_school_center_file = []
-    gradient_school_edges_file = []
-    dif_gradient_center_edges_file = []
-    
-    width_length_ratio_file = []    # class 3   elongation 
-    axis_ellipse_ratio_file = []  #  short / long   eccentricity 
-    solidity_file = []
-    compactness_file = []
-    inertia_tensor_eigvals_ratio_file = []    
-    perimeter_area_ratio_file = []
-
-    centroid_file = []    # file class 4
-    depth_file = []     
-    coords_file = []  
-
-    edges_school_file = []  # file class 5
-    center_square_file = []
-
-    # Step 6 : Read the info from the sam pkl file
-    seg_new = sam_result[file]
-    segmentations = seg_new['segmentation']
-    bboxs = seg_new['bbox']
-    areas = seg_new['area']
-    if len(segmentations)>0 :
-        binary_matrice = np.zeros((np.array(segmentations[0])).shape)
-
-        # Step 5 : Get the union of segmentations of fish school
-        for j in range(len(segmentations)):
-            seg = segmentations[j]
-            intensity_c_seg = np.mean(im[seg])                                      # 2: use corrected seg intensity
-
-            bbox = bboxs[j]
-            # Check if there are any common positions
-            common_positions = np.logical_and(mask, seg)
-            intersections_mask = np.any(common_positions)
-
-            # Criterion 1
-            if (not intersections_mask) and (intensity_c_seg>intensity_c_img_mask) and (areas[j]<size_limit) and (bbox[3]<length_limit):   # 2 : big or small both use the same intensity limit
-                    binary_matrice[seg] = 1
-                                  
-        label_img = label(binary_matrice)
-        regions = regionprops(label_img)
-        
-        # Step 6 : Get the informations from the fish school detected
-        if len(regions) > 0 : 
-            plt.imsave(f'{dest_path}\{file[:-4]}.png', binary_matrice, cmap='gray')
-            for region in  regions:
-                if region.area > 1 :
-                    coords = region.coords
-                    y_coords = coords[:, 0]
-                    x_coords = coords[:, 1]
-                    bbox = region.bbox
-                    dis_to_bottom = bottom - bbox[1]-bbox[3]/2
-                    dis_to_surface = bbox[1]
-                    is_very_wide = 1 if (bbox[3]-bbox[1])>width_image/2 else 0
-                    is_very_tall = 1 if (bbox[2]-bbox[0])>height_image/2 else 0
-                    
-                    if dis_to_surface > dis_check and dis_to_bottom > dis_check:
-                        dis_level = 2
-                    elif dis_to_bottom < dis_limit or dis_to_surface <dis_limit:
-                        dis_level = 0
-                    else:
-                        dis_level = 1
-                    # Calculate the average coordinates
-                    avg_0 = sum(coord[0] for coord in coords) / len(coords)
-                    avg_1 = sum(coord[1] for coord in coords) / len(coords)
-
-                    intensities = [img[coord[0], coord[1]] for coord in coords]
-                    max_index = np.argmax(intensities)
-                    max_intensity_coords = coords[max_index]
-                
-                    edges_school = find_edges(binary_matrice, y_coords, x_coords)
-                    center_square = find_center_square(max_intensity_coords, region.coords)  # use max_intensity_coords not center
-                    center_square_intensity =  np.mean([img[coord[0], coord[1]] for coord in center_square])
-                    edges_school_intensity =  np.mean([img[coord[0], coord[1]] for coord in edges_school])
-                    dif_intensity_center_edges = center_square_intensity - edges_school_intensity
-                    std_intensity_school = np.std([img[coord[0], coord[1]] for coord in coords])
-                
-                    gradient_y, gradient_x = np.gradient(coords)
-                    gradient_magnitude = np.sqrt(gradient_x**2 + gradient_y**2)
-                    gradient_school = np.mean(gradient_magnitude)
-                    gradient_y_center, gradient_x_center = np.gradient(center_square)
-                    gradient_magnitude_center = np.sqrt(gradient_x_center**2 + gradient_y_center**2)
-                    gradient_school_center = np.mean(gradient_magnitude_center)
-                    gradient_y_edges, gradient_x_edges = np.gradient(edges_school)
-                    gradient_magnitude_edges = np.sqrt(gradient_x_edges**2 + gradient_y_edges**2)
-                    gradient_school_edges = np.mean(gradient_magnitude_edges)
-                    dif_gradient_center_edges = abs(gradient_school_center - gradient_school_edges)
-        
-                    centroid_file.append(region.centroid)
-                    label_file.append(region.label)
-                    bbox_file.append(region.bbox)
-                    width_length_file.append([region.bbox[3]-region.bbox[1],region.bbox[2]-region.bbox[0]])
-                    axis_ellipse_file.append([region.axis_major_length,region.axis_minor_length])
-                    perimeter_file.append(region.perimeter)
-                    size_file.append(region.area)
-                    is_very_wide_s.append(is_very_wide)
-                    is_very_tall_s.append(is_very_tall)
-                    dis_level_s.append(dis_level)
-                    dis_to_surface_s.append(dis_to_surface)
-                    dis_to_bottom_s.append(dis_to_bottom)
-
-                    intensity_school.append([np.mean(img[y_coords, x_coords]),np.min(img[y_coords, x_coords]),np.max(img[y_coords, x_coords])])
-                    dif_intensity_s_i.append(np.mean(intensities) - intensity_img[0])
-                    
-                    center_square_intensity_file.append(center_square_intensity)
-                    edges_school_intensity_file.append(edges_school_intensity)
-                    dif_intensity_center_edges_file.append(dif_intensity_center_edges)
-                    std_intensity_school_file.append(std_intensity_school)
-                    gradient_school_file.append(gradient_school)    
-                    gradient_school_center_file.append(gradient_school_center)
-                    gradient_school_edges_file.append(gradient_school_edges)
-                    dif_gradient_center_edges_file.append(dif_gradient_center_edges)
-
-                    width_length_ratio_file.append((region.bbox[3]-region.bbox[1])/(region.bbox[2]-region.bbox[0]))
-                    axis_ellipse_ratio_file.append(region.axis_minor_length/region.axis_major_length)
-                    solidity_file.append(region.solidity)
-                    compactness_file.append(4*math.pi*(region.area)/(region.perimeter**2))
-                    inertia_tensor_eigvals_ratio_file.append(region.inertia_tensor_eigvals[1]/region.inertia_tensor_eigvals[0])
-                    perimeter_area_ratio_file.append(region.perimeter/region.area)
-            
-                    coords_file.append(region.coords)
-                    depth_file.append(avg_0/10)
-                    edges_school_file.append(edges_school)
-                    center_square_file.append(center_square)
-
-            y_all = np.dot(size_file, [coord[0] for coord in centroid_file]) / np.sum(size_file)
-            x_all = np.dot(size_file, [coord[1] for coord in centroid_file]) / np.sum(size_file)
-            intensity_school_array = np.vstack(intensity_school)
-            mean_intensity_school = np.dot(size_file, intensity_school_array[:,0])/np.sum(size_file)
-            
-            file_info = {"label":label_file,
-                        "size":size_file,
-                        "bbox":bbox_file,
-                        "depth":depth_file,
-                        "center":centroid_file,
-                        "width_length":width_length_file,
-                        "is_very_wide":is_very_wide_s,
-                        "is_very_tall":is_very_tall_s,
-                        'dis_to_surface':dis_to_surface_s,
-                        'dis_to_bottom':dis_to_bottom_s,
-                        'dis_level':dis_level_s,
-                        "axis_ellipse": axis_ellipse_file,
-                        "perimeter_school": perimeter_file,
-                        "intensity_school":intensity_school,
-                        "dif_intensity_school_image": dif_intensity_s_i,
-                        "intensity_img":intensity_img,
-                        "center_square_intensity":center_square_intensity_file, 
-                        "edges_school_intensity":edges_school_intensity_file,
-                        "dif_intensity_center_edges":dif_intensity_center_edges_file,
-                        "std_intensity_school":std_intensity_school_file,
-                        "gradient_school":gradient_school_file,
-                        "gradient_school_center":gradient_school_center_file,
-                        "gradient_school_edges":gradient_school_edges_file,
-                        "dif_gradient_center_edges":dif_gradient_center_edges_file,
-                        "width_length_ratio":width_length_ratio_file,
-                        "axis_ellipse_ratio":axis_ellipse_ratio_file,
-                        "solidity":solidity_file,
-                        "compactness":compactness_file,
-                        "inertia_tensor_eigvals_ratio":inertia_tensor_eigvals_ratio_file,
-                        "perimeter_area_ratio":perimeter_area_ratio_file,
-                        "coords":coords_file,
-                        "nbr_school":len(label_file),
-                        "total_area":sum(size_file),
-                        "mean_intensity_school":mean_intensity_school,
-                        "center_all":[y_all,x_all],     #[row,column]
-                        "mean_depth":y_all/10}
-            new_row_table = {'file':file, 
-                        'nbr_school':len(label_file), 
-                        'all_size':sum(size_file),
-                        'mean_intensity_school':mean_intensity_school,
-                        'mean_depth':y_all/10,
-                        'mean_intensity_imgwithout0':np.mean(img[img!=0])} 
-
-            return file_info ,new_row_table,centroid_file
-        else:
-            return None, None, None
-    else:
-        return None, None, None
-
 
 ##############################################################################################
 ##############                       version time  20250702                     ##############
 ##############################################################################################
 def sam_info(file,sam_result,npy_path,csv_path,dest_path):    # version time : 20240806
+
+    """
+    Filter the segment of segment anything and extraction the fish schools info 
+
+    Parameters:
+    - dest_path: Path to save the output images and tables.
+    - csv_path : Path to the csv file creating from the run script
+    - sam_result : sam_results.pkl all the segment from segment anything model 
+    - file: The resized file name, ending with the format '.npy'.
+    
+    Returns:
+    1 - file_info: Information about fish schools (to be saved in a pkl file).
+    2 - new_row_table: Information by files or by images (to be generated as a CSV table).
+    3 - centroid_file: All the (weighted) centroids of fish schools in the image.
+    """
     # Step 1 : change the file name to get the corresponding name in sam result
     file_npy =file[:-4]+'.npy'
 

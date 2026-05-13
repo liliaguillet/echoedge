@@ -1,14 +1,5 @@
 import numpy as np
 
-# def get_beam_dead_zone(echodata): 
-
-#     echodata[np.isnan(echodata)] = 0
-#     row_sums = np.mean(echodata, axis=1).tolist()
-#     for i, row in enumerate(row_sums):
-#         if row == row:
-#             if row < (-50):
-#                 return i
-
 
 def find_wave_smoothness(waves_list):
     wave_difs = [abs(j-i) for i, j in zip(waves_list[:-1], waves_list[1:])]

@@ -1,0 +1,14 @@
+ECHOEDGE AUTHORS
+------------------
+
+The main contributors to the Nucleos'ID project are:
+ 
+* Joakim Eriksson
+
+* Jonas Hentati-Sundberg
+
+* Lilia Guillet
+
+* Jiao Liu 
+
+* Thao Phuong Sofia Nguyen

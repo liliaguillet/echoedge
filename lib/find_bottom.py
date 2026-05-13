@@ -23,45 +23,6 @@ def detect_outliers(data, threshold=3):
     return np.abs(z_scores) > threshold
 
 
-# def find_bottom_for_svea(echodata, wave_line):
-    
-#     echodata_original = echodata.copy()
-#     echodata = echodata[max(wave_line):, :]
-#     echodata =  median_filter(echodata, size=(30,5))
-
-#     echodata = np.where(echodata < -50, -90, 0)
-
-#     # Hittar alla max indices
-#     max_indices = np.argmax(echodata, axis=0)
-#     max_indices[max_indices == 0] = echodata_original.shape[0]
-
-#     #Interpolerar alla outliers 
-#     outlier_mask = detect_outliers(max_indices)
-#     data_with_nans = [x if not outlier else np.nan for x, outlier in zip(max_indices, outlier_mask)]
-#     non_outlier_indices = np.where(~outlier_mask)[0]
-#     interp_func_outliers = interp1d(non_outlier_indices, np.array(data_with_nans)[non_outlier_indices], kind='linear', fill_value='extrapolate')
-#     interpolated_outliers = [interp_func_outliers(i) if np.isnan(x) else x for i, x in enumerate(data_with_nans)]
-
-
-#     non_nan_indices = np.where(max_indices != echodata_original.shape[0])[0]
-#     non_nan_values  = max_indices[non_nan_indices]
-
-#     # If all pings are empty, we are returning 350 as a representation of NaN (no bottom found)
-#     if non_nan_indices.size == 0:
-#         max_indices = [350]*echodata_original.shape[1]
-#     else:
-#         # Interpolate all empty pings after interpolation
-#         interp_func_zeros = interp1d(non_nan_indices, non_nan_values, kind='linear', fill_value='extrapolate')
-#         max_indices = [interp_func_zeros(i) if x == echodata_original.shape[0] else x for i, x in enumerate(interpolated_outliers)]
-
-#         # Remove bottom
-#         max_indices = [int(i) for i in max_indices]
-#         for i in range(0, len(max_indices )):
-#             echodata_original[(max_indices[i]+max(wave_line)):,(i)] = 0 
-
-#     return echodata_original, max_indices 
-
-
 # Sailor
 def moving_average(data, window_size):
     series = pd.Series(data)
@@ -95,15 +56,6 @@ def replace_outliers_with_nan(data):
     data[outliers_mask] = np.nan
 
     return data
-
-
-# def get_beam_dead_zone(echodata):
-#     echodata[np.isnan(echodata)] = 0
-#     row_sums = np.mean(echodata, axis=1).tolist()
-#     for i, row in enumerate(row_sums):
-#         if row == row:
-#             if row < (-50):
-#                 return i
 
 
 def find_bottom(echodata, window_size, hardness_thresh):
