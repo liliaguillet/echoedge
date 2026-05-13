@@ -15,7 +15,7 @@ Echoedge
 
 Echoedge is a repository with code and instructions on how to run echogram processing and analysis with Python. 
 
-.. image:: https://github.com/liliaguillet/echoedge/Drone.png 
+.. image:: Drone.png
    :align: center
 
 Installation
