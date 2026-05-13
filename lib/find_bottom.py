@@ -7,7 +7,12 @@ from scipy.ndimage import median_filter
 
 # Svea
 def get_beam_dead_zone(echodata): 
+    """
+    Get beam dead zone : size of echosounder near-zone (signal too strong at the top), number of bins to remove at the top of the echodata. 
 
+    Parameters:
+    - Echodata : the echograms  
+    """
     echodata[np.isnan(echodata)] = 0
     row_sums = np.mean(echodata, axis=1).tolist()
     for i, row in enumerate(row_sums):
@@ -17,6 +22,12 @@ def get_beam_dead_zone(echodata):
 
 
 def detect_outliers(data, threshold=3):
+    """
+    Detect depth estimate outliers
+
+    Parameters:
+    - Data : depth estimate
+    """
     mean = np.mean(data)
     std_dev = np.std(data)
     z_scores = [(x - mean) / std_dev for x in data]
@@ -25,11 +36,26 @@ def detect_outliers(data, threshold=3):
 
 # Sailor
 def moving_average(data, window_size):
+    """
+    Smooth the depth estimation on a window size
+
+    Parameters:
+    - Data : depth estimate
+    - Window size : define in the initial parameters
+    """
+    
     series = pd.Series(data)
     moving_averages = series.rolling(window=window_size, center=True, min_periods=1).mean()
     return  moving_averages.tolist()
 
 def interpolate_nan(lst, depth_if_all_nan):
+    """
+    Interpolate missing value of depth. 
+
+    Parameters:
+    - lst : depth estimate
+    - depth_if_all_nan : in case all depth values are nan the default value is defined by this parameter
+    """
 
     arr = np.array(lst)
     nan_indices = np.isnan(arr)
@@ -44,6 +70,12 @@ def interpolate_nan(lst, depth_if_all_nan):
     return arr.tolist()
 
 def replace_outliers_with_nan(data):
+    """
+    Outliers are replaced with nan. First indentified outliers and then replace them by nan. 
+
+    Parameters:
+    -data :echodata
+    """
 
     def detect_outliers(data, threshold=3):
         mean = np.mean(data)
@@ -59,6 +91,15 @@ def replace_outliers_with_nan(data):
 
 
 def find_bottom(echodata, window_size, hardness_thresh):
+    """
+    Estimate the depth (bathymtry) from the echogram.
+
+    Parameters:
+    - echodata : calibrated acoustic data
+    - window size : Windowsize to use when calculating moving averages of depth.
+    - hardness_thresh : Threshold used to classify bottom. Signal needs to be stronger than threshold to be classified as bottom. If signal is weaker, depth > 100m
+    """
+
     echodata_original = echodata.copy()
     #Get dead zone and slice it out from echodata
     dead_zone = get_beam_dead_zone(echodata) 

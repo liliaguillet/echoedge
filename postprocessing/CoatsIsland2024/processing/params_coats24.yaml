@@ -26,7 +26,7 @@ no_bottom_default: 101
 
 sonar_depth: 0.6
 beam_dead_zone: 10
-dead_zone: 15
+
 
 wave_thresh: -77
 wave_thresh_layer: -68

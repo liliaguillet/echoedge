@@ -59,6 +59,12 @@ def process_data(path, env_params, cal_params, bin_size, waveform, ping_time_bin
 
         
 def clean_times(ping_times, nan_indicies):
+    """
+    Remove nan from the times
+
+    ping_times : ping time from the echosounder
+    nan_indicies : location of the nan
+    """
     mask = np.ones(ping_times.shape, dtype=bool)
     mask[nan_indicies] = False
 
@@ -69,6 +75,11 @@ def clean_times(ping_times, nan_indicies):
 
 
 def remove_vertical_lines(echodata):
+    """
+    Find the indices of the arrays that contain only NaN and remove them
+
+    echodata : calibrated acoustic data
+    """
     # Find the indices of the arrays that contain only NaN
     nan_indices = np.isnan(echodata).all(axis=1)
     indices_to_remove = np.where(nan_indices)[0]
@@ -82,7 +93,7 @@ def remove_vertical_lines(echodata):
 def get_interpolated_gps2(path, ltz, frequency=2):
     """
     Interpolates coordinates
-    Jiao version
+
     Args: 
         path (str): The path to gps.csv file  
         frequency (int) : The frequency of interpolation in seconds

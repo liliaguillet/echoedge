@@ -6,7 +6,11 @@ import os
 # Plot and Visualize data
 def data_to_images(data, img_path='', npy_path = '', normalization=False, upper=False, lower=False):
     """
-    Function to create images (greyscale & viridis) from np_array with high resolution and exportmatrix of the image as .npy
+    Function to create images (greyscale & viridis) from np_array  with high resolution and exportmatrix of the image as .npy
+
+    data : np.array
+    img_path : where to save the image in png
+    npy_path : where to save the array in npy
     """
 
     np_data = np.nan_to_num(data, copy=True)
