@@ -10,12 +10,12 @@ Echoedge
 :Version: 1.0.0
 :Download: https://github.com/liliaguillet/echoedge.git
 :Source: https://github.com/liliaguillet/echoedge.git
-:Keywords: scientific software, fish schools, echosounder
+:Keywords: scientific software, fish schools, echosounder,
     python
 
 Echoedge is a repository with code and instructions on how to run echogram processing and analysis with Python. 
 
-.. image:: https://github.com/MSARN/NucleosID/raw/main/nucleosid/images/nucleosid-logo.png 
+.. image:: https://github.com/liliaguillet/echoedge/Drone.png 
    :align: center
 
 Installation
@@ -59,7 +59,7 @@ Bug tracker
 If you have any suggestions, bug reports, or annoyances please report
 them to our issue tracker at https://github.com/.../issues.
 
-Strucure
+Structure
 ========
 echoedge/
 ├── lib/
@@ -72,7 +72,7 @@ echoedge/
 
 Acknowledgements
 ================
-The processing of the raw-files from the echosounder is based on the [Echopype](https://echopype.readthedocs.io/en/stable/) library.  
+The processing of the raw-files from the echosounder is based on the **Echopype**(https://echopype.readthedocs.io/en/stable/) library.  
 
 
 Citation
