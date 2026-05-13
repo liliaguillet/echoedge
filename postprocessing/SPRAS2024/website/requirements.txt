@@ -1,5 +1,0 @@
-flask
-pymysql
-sqlalchemy
-cloud-sql-python-connector[pymysql]
-folium
