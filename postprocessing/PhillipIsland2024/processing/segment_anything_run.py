@@ -8,7 +8,7 @@ import os
 import sys
 from tqdm import tqdm
 import pickle
-#sys.path.append("..")
+sys.path.append("..")
 
 def show_anns(anns):
     if len(anns) == 0:
@@ -28,18 +28,14 @@ def show_anns(anns):
 
 
 device = "cuda"
-sam = sam_model_registry["vit_h"](checkpoint="C:/Users/jliu/Documents/sam_vit_h_4b8939.pth")
-sam.to(device=device)
+sam = sam_model_registry["vit_h"](checkpoint="../../../SAM/sam_vit_h_4b8939.pth")
+# sam.to(device=device)
 mask_generator = SamAutomaticMaskGenerator(sam)
 
-# PATH ###############################################################################
 # path : The directory from which to read the files.
 # dest_path : The output directory where the output images will be saved.
-path = "Output/Mask_img/Test"
-dest_path = "Output/SAM/Segment_anything/Test"
-
-######################################################################################
-
+path = "F:/SURVEY2025/PREPROCESS_DATA/Mask"
+dest_path = "F:/SURVEY2025/SEGMENT_ANYTHING"
 
 if not os.path.exists(dest_path):
     os.makedirs(dest_path)

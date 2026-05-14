@@ -15,9 +15,9 @@ from Double_thresh_function import npy_correction_v3,parameters_correction
 
 
 # PATH #################################################################################
-path_npy = "F:/SURVEY2023/PREPROCESS_DATA/Resize_Img"# Resize image
-dest_path_png = "F:/SURVEY2023/PREPROCESS_DATA/Mask" # Where the masked image will be saved
-csv_path = "F:/SURVEY2023/PREPROCESS_DATA/Csv" #Csv file from the first output
+path_npy = "F:/SURVEY2025/PREPROCESS_DATA/Resize"# Resize image
+dest_path_png = "F:/SURVEY2025/PREPROCESS_DATA/Mask" # Where the masked image will be saved
+csv_path = "F:/SURVEY2025/PREPROCESS_DATA/Csv" #Csv file from the first output
 ######################################################################################
 
 if not os.path.exists(dest_path_png):

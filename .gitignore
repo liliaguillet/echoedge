@@ -7,6 +7,9 @@
 # Raw files
 *.raw
 
+#
+*.pth
+
 # Mac system files
 .DS_Store
 
