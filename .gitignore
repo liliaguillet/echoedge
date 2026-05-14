@@ -5,7 +5,7 @@
 .Ruserdata
 
 # Raw files
-*.raw
+#*.raw
 
 #
 *.pth
@@ -14,14 +14,14 @@
 .DS_Store
 
 # Image files
-
+*.png
 *.gif
 *.jpg
 *.mp4
 !*workflow.png
 
 # CSV files
-*.csv
+#*.csv
 *.npy
 *.db
 
