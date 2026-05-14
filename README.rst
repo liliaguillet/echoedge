@@ -13,7 +13,7 @@ Echoedge
 :Keywords: scientific software, fish schools, echosounder,
     python
 
-Echoedge is a repository with code and instructions on how to run echogram processing and analysis with Python. 
+Echoedge is a repository with code and instructions on how to run echogram processing and analysis with Python and extract fish schools from echograms. 
 
 .. image:: Drone2.png
    :align: center
@@ -30,6 +30,7 @@ Start by checking your current environment, our configurations are shown below.
 It should be possible to run with other python-versions and other operating systems. 
 Continue by cloning this repo, installing necessary packages and creating a cronjob. 
 Please note that the latest version of Echopype is only compatible with Python>=3.9.
+Install Segment Anything Model according to : https://github.com/facebookresearch/segment-anything#model-checkpoints
 
 
 To get the source, clone the last version of Echoedge repository:
@@ -45,7 +46,7 @@ Install the software
 First, install the dependencies and create the environment:
 
 .. code-block:: 
-   
+
    python3 -m venv venv
    source venv/bin/activate
    pip3 install -r requirements.txt
@@ -64,17 +65,19 @@ them to our issue tracker at https://github.com/.../issues.
 Structure
 ========
 echoedge/
+├── Doc/
+│   └──processing_example
 ├── lib/
 ├── postprocessing/
 │   └── subfolder-per-survey/
-├── test/
 ├── .gitignore
 ├── requirements.txt
 └── README.rs
 
 Acknowledgements
 ================
-The processing of the raw-files from the echosounder is based on the **Echopype**(https://echopype.readthedocs.io/en/stable/) library.  
+The processing of the raw-files from the echosounder is based on the Echopype library(https://echopype.readthedocs.io/en/stable/).  
+For one of the fish school extraction method, we based our analysis one Segment Anything Model(https://github.com/facebookresearch/segment-anything#model-checkpoints).
 
 
 Citation
