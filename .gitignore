@@ -14,7 +14,7 @@
 .DS_Store
 
 # Image files
-*.png
+#*.png
 *.gif
 *.jpg
 *.mp4
