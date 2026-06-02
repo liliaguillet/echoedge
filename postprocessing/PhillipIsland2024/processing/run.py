@@ -29,7 +29,7 @@ with open('../PI_parameters.yaml', 'r') as f:
 csv_path = "F:/SURVEY2025/PREPROCESS_DATA/Csv"
 img_path = "F:/SURVEY2025/PREPROCESS_DATA/Img"
 npy_path = "F:/SURVEY2025/PREPROCESS_DATA/npy"
-files_path = "F:/SURVEY2025/SURVEY RAW DATA/Test" #2023 path
+files_path = "F:/SURVEY2025/SURVEY RAW DATA/Files" #2023 path
 # files_p = pd.read_csv('../../../test/Rerun/Rerun_files.csv')
 # files = files_p['raw_list']
 
@@ -75,10 +75,18 @@ for file in tqdm.tqdm(files[:]):
             filepath = file
             name = file[-50:]
             new_file_name =  name.replace(name[-4:], '')
-
+            survey = file[3:13]
             # Load and process the raw data files
-            echodata, ping_times = process_data(filepath, params[0]['env_params'], params[0]['cal_params'], params[0]['bin_size'], 'BB')
-            echodata = echodata.Sv.to_numpy()[0]
+            if  survey == 'SURVEY2025' :
+                echodata, ping_times = process_data(filepath, params[0]['env_params_2024'], params[0]['cal_params_2024'], params[0]['bin_size'], 'BB')
+                echodata = echodata.Sv.to_numpy()[0]
+            if  survey == 'SURVEY2024' :
+                echodata, ping_times = process_data(filepath, params[0]['env_params_2024'], params[0]['cal_params_2024'], params[0]['bin_size'], 'BB')
+                echodata = echodata.Sv.to_numpy()[0]
+            if  survey == 'SURVEY2023' :
+                echodata, ping_times = process_data(filepath, params[0]['env_params_2023'], params[0]['cal_params_2023'], params[0]['bin_size'], 'BB')
+                echodata = echodata.Sv.to_numpy()[0]
+
 
             #UTC Time
             ping_times_series = pd.to_datetime(ping_times)

@@ -1,11 +1,20 @@
-env_params:
+env_params_2023:
   temperature: 20.338 # temperature in celsius
   salinity: 34.27 # salinity from PPS78 (R gsw_SP_from_C)
   pressure: 10.1325 # pressure in dBar
 
+env_params_2024:
+  temperature: 14.730 # temperature in celsius
+  salinity: 32.2 # salinity from PPS78 (R gsw_SP_from_C)
+  pressure: 10.1325 # pressure in dBar
 
-cal_params:
+
+cal_params_2023:
   gain_correction: 28.49 # center value of gain (here 19th frequency: 202657)
+  equialent_beam_angle: -21 # ctrl+F in the calibration file
+
+cal_params_2024:
+  gain_correction: 27.480 # center value of gain (here 19th frequency: 202657)
   equialent_beam_angle: -21 # ctrl+F in the calibration file
 
 
