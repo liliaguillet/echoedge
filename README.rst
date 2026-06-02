@@ -66,15 +66,15 @@ Structure
 ========
 .. code-block:: 
 
-echoedge/
-├── Doc/
-│   └──processing_example
-├── lib/
-├── postprocessing/
-│   └── subfolder-per-survey/
-├── .gitignore
-├── requirements.txt
-└── README.rs
+   echoedge/
+   ├── Doc/
+   │   └──processing_example
+   ├── lib/
+   ├── postprocessing/
+   │   └── subfolder-per-survey/
+   ├── .gitignore
+   ├── requirements.txt
+   └── README.rst
 
 Acknowledgements
 ================
