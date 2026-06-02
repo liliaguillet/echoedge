@@ -64,7 +64,7 @@ them to our issue tracker at https://github.com/.../issues.
 
 Structure
 ========
-::
+.. code-block:: 
 
 echoedge/
 ├── Doc/
