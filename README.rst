@@ -79,7 +79,7 @@ Structure
 Acknowledgements
 ================
 The processing of the raw-files from the echosounder is based on the Echopype library(https://echopype.readthedocs.io/en/stable/).  
-For one of the fish school extraction method, we based our analysis one Segment Anything Model(https://github.com/facebookresearch/segment-anything#model-checkpoints).
+For one of the fish school extraction method, we based our analysis on Segment Anything Model(https://github.com/facebookresearch/segment-anything#model-checkpoints).
 
 
 Citation
