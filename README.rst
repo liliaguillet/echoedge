@@ -95,7 +95,7 @@ License
 =======
 
 Echoedge is released under the Apache 2.0 license, as found
-in the `LICENSE <LICENSE>`_ file.
+in the `LICENSE <LICENSE>` file.
 
 .. |DOI| image:: https://zenodo.org/badge/DOI/ ... 
    :target: https://doi.org/ .... 
