@@ -47,32 +47,32 @@ You can run an example with a *.raw* obtain from a USV (Uncrewed Surface Vehicle
 Before change the path in *segment_anything_run.py* of the checkpoint for SAM.
 After you can run *run_all.py* look for the results.
 
-**STEP 1** = Before running the example, ensure the following:
+* **STEP 1** = Before running the example, ensure the following:
 
-(i) Python environment :
+ (i) Python environment :
+ 
+ - A virtual environment is recommended :
+ python -m venv venv_echoedge
+ source venv_echoedge/bin/activate
+ 
+ - Install dependencies:
+ pip install -r requirements.txt
+ 
+ (ii) Segment Anything Model (SAM)
+ 
+ - The checkpoint file sam_vit_h_4b8939.pth must be downloaded and placed in an accessible directory (https://github.com/facebookresearch/segment-anything/tree/main)
+ 
+ - The script segment_anything_run.py must point to the correct path of the sam_vit_h_4b8939.pth file :
+ sam = sam_model_registry["vit_h"](checkpoint="/path/to/SAM/sam_vit_h_4b8939.pth")
 
-- A virtual environment is recommended :
-python -m venv venv_echoedge
-source venv_echoedge/bin/activate
-
-- Install dependencies:
-pip install -r requirements.txt
-
-(ii) Segment Anything Model (SAM)
-
-- The checkpoint file sam_vit_h_4b8939.pth must be downloaded and placed in an accessible directory (https://github.com/facebookresearch/segment-anything/tree/main)
-
-- The script segment_anything_run.py must point to the correct path of the sam_vit_h_4b8939.pth file :
-sam = sam_model_registry["vit_h"](checkpoint="/path/to/SAM/sam_vit_h_4b8939.pth")
-
-**STEP 2** = Running the example
-
-- From the project root directory (processing_example/), launch the main script :
-python3 run_all.py
-
-- When the histogram of all velocities is displayed (Resize.py), close the plot window manually to allow the script to continue.
-
-- View results in the Ouput/ folder. 
+* **STEP 2** = Running the example
+ 
+ - From the project root directory (processing_example/), launch the main script :
+ python3 run_all.py
+ 
+ - When the histogram of all velocities is displayed (Resize.py), close the plot window manually to allow the script to continue.
+ 
+ - View results in the Ouput/ folder. 
 
 Credits
 -------
