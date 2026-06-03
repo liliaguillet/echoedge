@@ -32,7 +32,7 @@ file_path = 'F:/DATA_HUDSON/RAW_FILES'
 files = Path(file_path).glob("*-0.raw")
 
 # Load all params from yaml-file
-with open('params_coats24.yaml', 'r') as f:
+with open('../params_coats24.yaml', 'r') as f:
     params = list(yaml.load_all(f, Loader=SafeLoader))
 
 ######################################################################

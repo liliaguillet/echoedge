@@ -18,30 +18,29 @@ the following ticketing system:
 
 
 
-Interface Description
+Input file
 ---------------------
 
 The proccessing and automatic fish schools can be tuned with the following parameters:
 
 * Input file: Acoustic data *.raw* , the gps location associated *.csv*,
- parameters of the echosounder (calibration) and processing  *.yaml*. Their details description can be found
- in echoedge_parameters.pdf
-
-* Output file: selection of the path and the name of the output file.
-
+parameters of the echosounder (calibration) and processing  *.yaml*. Their details description can be found
+in echoedge_parameters.pdf
 
 Output File
 -----------
 
-The results of the analysis are saved in the *output folder*. In *preprocess_data* folder there are the result of he NASC,
- bathymetry and waves depth per echogramin *Csv* as *.csv* a *.xsls* with the details variable is available in *preprocess paramater output*  , the visulisation of the echogram before/after seabed and waves
- removal *.png* in Img and *.npy* in npy, the santardised echogram (constant velocity) in Resize as *.png* and *.npy* and 
- the masked images used later for Segment Anything processing as *.png*. After there are two other flders with the results
- of the schools extraction as *.png* and *.csv* wth the details of the morphometric descriptions.
+* Output file: selection of the path and the name of the output file.
 
- Here the process.The detail description of th process can be found in the article : 
+The results of the analysis are saved in the *output folder*. In *preprocess_data* folder there are the result of the NASC,
+bathymetry and waves depth per echogramin *Csv* as *.csv* a *.xsls* with the details variable is available in *preprocess paramater output*  , the visulisation of the echogram before/after seabed and waves
+removal *.png* in Img and *.npy* in npy, the santardised echogram (constant velocity) in Resize as *.png* and *.npy* and 
+the masked images used later for Segment Anything processing as *.png*. After there are two other flders with the results
+of the schools extraction as *.png* and *.csv* wth the details of the morphometric descriptions.
 
- .. image:: Proccessing.png
+Here the process.The detail description of th process can be found in the article : 
+
+ .. image:: images/Proccessing.png
    :align: center
 
 

@@ -15,7 +15,7 @@ Echoedge
 
 Echoedge is a repository with code and instructions on how to run echogram processing and analysis with Python and extract fish schools from echograms. 
 
-.. image:: Drone2.png
+.. image:: images/Drone2.png
    :align: center
 
 Installation
@@ -56,12 +56,6 @@ First, install the dependencies and create the environment:
 Then, build and install the software:
 
 
-Bug tracker
-===========
-
-If you have any suggestions, bug reports, or annoyances please report
-them to our issue tracker at https://github.com/.../issues.
-
 Structure
 ========
 .. code-block:: 
@@ -86,13 +80,16 @@ Citation
 ========
 
 As part of the research process, it is important that pieces of software
-that have contributed to the research are cited. The source code is available on GitHub[1] and archived in Zenodo[2].
+that have contributed to the research are cited. The source code is available on GitHub[1], archived in Zenodo[2] 
+and please cite the associated paper [3].
 
 #. https://github.com/ ... 
 
-#. Guillet, M., Liu, C. François, Y. & Hentati Sundberg, J.Echoedge v1.0.0.
-   *Zenodo* **2022**, https://doi.org/
+#. Guillet, M., Liu, ... , Y. & Hentati Sundberg, J.Echoedge v1.0.0.
+   *Zenodo* **2026**, https://doi.org/ --> coming soon
 
+#. Lilia GUILLET, Jiao LIU, Astrid A. CARLSEN, Quentin QUEIROS, Lauriane KHUN, Benoît NAEGEL, Andre CHIARADIA,
+ Kyle ELLIOTT, Céline MEILLIER, Jonas HENTATI SUNDBERG & Claire SARAUX. Automatic Detection of Fish Schools in Acoustic Data. **2026**
 
 License
 =======
