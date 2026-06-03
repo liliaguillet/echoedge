@@ -31,6 +31,7 @@ It should be possible to run with other python-versions and other operating syst
 Continue by cloning this repo, installing necessary packages and creating a cronjob. 
 Please note that the latest version of Echopype is only compatible with Python>=3.9.
 Install Segment Anything Model according to : https://github.com/facebookresearch/segment-anything#model-checkpoints
+You should also check in the requirements the procedure to install Segment Anythinh Model dependancies. 
 
 
 To get the source, clone the last version of Echoedge repository:
