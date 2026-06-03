@@ -13,12 +13,11 @@ PyYAML==6.0.1
 ruamel.base==1.0.0
 scipy==1.13.1
 tqdm==4.64.0
-typing_extensions
-scikit-image
-astral 
+typing_extensions==4.15.0
+scikit-image==0.24.0
+astral==3.2 
 segment-anything==1.0
 torchvision==0.27.0+cu130
 torch==2.12.0+cu130
-
-pathlib
+pathlib==1.0.1
 setuptools
