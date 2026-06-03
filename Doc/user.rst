@@ -40,7 +40,7 @@ of the schools extraction as *.png* and *.csv* wth the details of the morphometr
 
 Here the process.The detail description of th process can be found in the article : 
 
- .. image:: images/Proccessing.png
+ .. image:: images/Processing.png
    :align: center
 
 
