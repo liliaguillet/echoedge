@@ -56,6 +56,7 @@ After you can run *run_all.py* look for the results.
  source venv_echoedge/bin/activate
  
  - Install dependencies:
+You should also check in the requirements the procedure to install Segment Anythinh Model dependencies. 
  pip install -r requirements.txt
  
  (ii) Segment Anything Model (SAM)
