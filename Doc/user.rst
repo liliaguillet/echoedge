@@ -47,7 +47,7 @@ You can run an example with a *.raw* obtain from a USV (Uncrewed Surface Vehicle
 Before change the path in *segment_anything_run.py* of the checkpoint for SAM.
 After you can run *run_all.py* look for the results.
 
-TEP 1 = Before running the example, ensure the following:
+*STEP 1 = Before running the example, ensure the following:
 
 (i) Python environment :
 
@@ -65,7 +65,7 @@ pip install -r requirements.txt
 - The script segment_anything_run.py must point to the correct path of the sam_vit_h_4b8939.pth file :
 sam = sam_model_registry["vit_h"](checkpoint="/path/to/SAM/sam_vit_h_4b8939.pth")
 
-STEP 2 = Running the example
+*STEP 2 = Running the example
 
 - From the project root directory (processing_example/), launch the main script :
 python3 run_all.py
