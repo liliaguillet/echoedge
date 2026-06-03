@@ -47,8 +47,8 @@ First, install the dependencies and create the environment:
 
 .. code-block:: 
 
-   python3 -m venv venv
-   source venv/bin/activate
+   python3 -m venv venv_echoedge
+   source venv_echoedge/bin/activate
    pip3 install -r requirements.txt
    pip3 install -e . # install library for this repo
 
