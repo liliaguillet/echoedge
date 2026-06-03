@@ -14,7 +14,7 @@ The source code can be obtained from the Github repository:
 https://github.com/liliaguillet/echoedge.git
 
 
-.. image:: images/Processing.png
+.. image:: ../images/Processing.png
 
 
 Input file
