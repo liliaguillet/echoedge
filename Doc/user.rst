@@ -13,9 +13,8 @@ It is a free software released under the `Apache license
 The source code can be obtained from the Github repository:
 https://github.com/liliaguillet/echoedge.git
 
-For reporting bugs or requesting new features, please use
-the following ticketing system:
 
+.. image:: images/Processing.png
 
 
 Input file
@@ -40,14 +39,14 @@ of the schools extraction as *.png* and *.csv* wth the details of the morphometr
 
 Here the process.The detail description of th process can be found in the article : 
 
-.. image:: images/Processing.png
-   :align: center
+
+
 
 
 Processing example
 ---------------------
 
-You can run an example with a *.raw* obtain from ... in Bass Strait.
+You can run an example with a *.raw* obtain from a USV (Uncrewed Surface Vehicle) was deployed around Phillip Island,to survey the preyscape of little penguins (Eudyptula minor) in Bass Strait.
 Before change the path in *segment_anything_run.py* of the checkpoint for SAM.
 After you can run *run_all.py* look for the results.
 
