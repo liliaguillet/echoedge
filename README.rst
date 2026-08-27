@@ -84,13 +84,12 @@ As part of the research process, it is important that pieces of software
 that have contributed to the research are cited. The source code is available on GitHub[1], archived in Zenodo[2] 
 and please cite the associated paper [3].
 
-#. https://github.com/ ... 
+#. https://github.com/liliaguillet/echoedge
 
-#. Guillet, M., Liu, ... , Y. & Hentati Sundberg, J.Echoedge v1.0.0.
+#. Lilia GUILLET, Jiao LIU, Astrid A. CARLSEN, Quentin QUEIROS, Lauriane KHUN, Benoît NAEGEL, Andre CHIARADIA,Kyle ELLIOTT, Céline MEILLIER, Jonas HENTATI SUNDBERG & Claire SARAUX. Echoedge v1.0.0.
    *Zenodo* **2026**, https://doi.org/ --> coming soon
 
-#. Lilia GUILLET, Jiao LIU, Astrid A. CARLSEN, Quentin QUEIROS, Lauriane KHUN, Benoît NAEGEL, Andre CHIARADIA,
- Kyle ELLIOTT, Céline MEILLIER, Jonas HENTATI SUNDBERG & Claire SARAUX. Automatic Detection of Fish Schools in Acoustic Data. **2026**
+#. Lilia GUILLET, Jiao LIU, Astrid A. CARLSEN, Quentin QUEIROS, Lauriane KHUN, Benoît NAEGEL, Andre CHIARADIA,Kyle ELLIOTT, Céline MEILLIER, Jonas HENTATI SUNDBERG & Claire SARAUX. Automatic Detection of Fish Schools in Acoustic Data. In review (Scientific Report)
 
 License
 =======
