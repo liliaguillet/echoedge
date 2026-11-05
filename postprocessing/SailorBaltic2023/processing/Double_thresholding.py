@@ -52,7 +52,7 @@ if not os.path.exists(dest_path_dt):
 files = os.listdir(npy_path)
 files_npy = [file for file in files if file.endswith('npy')]
 
-criteria_table = pd.DataFrame(columns=['file', 'convergence_all','nbr_school',
+criteria_table = pd.DataFrame(columns=['file', 'convergence_all','max_length','nbr_school',
                                        'mean_c1','mean_c2','mean_c3',
                                        'min_c1','min_c2','min_c3',
                                        'thresh_max','min_pixel_intensity','total_rows',
@@ -98,7 +98,7 @@ for file in tqdm(files_npy):
             nbr_school.append(len(big_regions))
 
         # Analyse the nbr of school sequence
-        max_start,max_end, nbr_estimate,convergence_value  = convergence_test_new20240730(nbr_school_all)
+        max_start,max_end, nbr_estimate,convergence_value, max_length  = convergence_test_new20240730(nbr_school_all)
         # Plotting nbr_school vs thresh_max
         plt.figure()
         plt.plot(thresh_maxs, nbr_school, marker='o',label = "nbr_school")
@@ -133,6 +133,7 @@ for file in tqdm(files_npy):
             nbr_school2_all = []
 
             for thresh_min in new_mins:
+                #print(thresh_min)
                 regions_min2 = np.digitize(im, bins=np.array([thresh_min]))
                 regions_min2[im.mask] = 0
                 
@@ -235,6 +236,7 @@ for file in tqdm(files_npy):
 
                 new_row = {'file':file, 
                            'convergence_all':convergence_value,
+                           'max_length': max_length,
                            'nbr_school':nbr_estimate,
                             'mean_c1':best_threshmin_mean1, 
                             'mean_c2':best_threshmin_mean2, 
@@ -251,6 +253,7 @@ for file in tqdm(files_npy):
             else:
                 new_row = {'file':file, 
                            'convergence_all':convergence_value,
+                           'max_length': max_length,
                            'nbr_school':nbr_estimate,
                             'mean_c1':None, 
                             'mean_c2':None, 
@@ -292,7 +295,7 @@ segment_threshold_results = {}
 segment_threshold_table = pd.DataFrame(columns=['file', 'nbr_school','all_size','mean_intensity_school','mean_depth','mean_intensity_imgwithout0'])
 
 for file in tqdm(files, desc="Processing matrix"):
-   
+    #print(file)
     file_info ,new_row,center_file = thresh_info_new20240806(dest_path = dest_path_dt,criteria_table = criteria_table,file = file ,thresh_index = 1,npy_path=npy_path)     # 2 : new threshold function
     
     # Step 4 : From the pixels in center_file, to get the original corresponding pixel position for school center ( npy resized ---> npy )

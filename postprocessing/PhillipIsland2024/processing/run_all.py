@@ -6,10 +6,10 @@ import segment_anything_run
 import sam_fish_school
 
 
-run()
-Resize()
+#run()
+#Resize()
 Double_thresholding()
-Mask_img_SAM()
-segment_anything_run()
-sam_fish_school()
+#Mask_img_SAM()
+#segment_anything_run()
+#sam_fish_school()
 

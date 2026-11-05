@@ -57,25 +57,34 @@ def convergence_test_new20240730(arr):
     # Find the maximum segment length and its index
     max_length = np.max(seq_length)
     max_p = len(seq_length) - 1 - seq_length[::-1].index(max_length)
-    # max_p = seq_length.index(max_length)
 
     max_start_index = segments[max_p]
     max_end_index = temp[max_p]-1
 
-    if arr[max_start_index] == 0:
-        convergence = 0
-    else:
-        if max_length >= 4:
-            convergence = 2
-        else:
-            convergence = 1
-       
-    
-
     # Convert max_start_index and max_end_index to integers
     max_start_index = int(max_start_index)
     max_end_index = int(max_end_index)
-    return max_start_index, max_end_index, arr[max_start_index],convergence
+
+    nbr_estimate = 0 #default value 
+
+    if arr[max_start_index] == 0: #Case with no schools observed
+        convergence = 0
+    else:
+        if max_length >= 2:
+            convergence = 2
+            nbr_estimate =  arr[max_start_index]
+        else: #case with schools observed but number of schools changing 
+            convergence = 1
+            # first index of the array to the last index of the array
+            max_start_index = 0
+            max_end_index = len(arr)
+            if len(arr)%2 == 0: # we choose the median value when there is no convergence
+                nbr_estimate = arr[len(arr)//2]
+            else:
+                nbr_estimate = arr[(len(arr)-1)//2]
+    
+
+    return max_start_index, max_end_index, nbr_estimate,convergence, max_length
 
 
 def find_center_square(centroid, coords):

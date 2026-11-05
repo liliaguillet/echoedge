@@ -50,7 +50,7 @@ if not os.path.exists(dest_path_dt):
 files = os.listdir(npy_path)
 files_npy = [file for file in files if file.endswith('npy')]
 
-criteria_table = pd.DataFrame(columns=['file', 'convergence_all','nbr_school',
+criteria_table = pd.DataFrame(columns=['file', 'convergence_all','max_length','nbr_school',
                                        'mean_c1','mean_c2','mean_c3',
                                        'min_c1','min_c2','min_c3',
                                        'thresh_max','min_pixel_intensity','total_rows',
@@ -96,7 +96,7 @@ for file in tqdm(files_npy):
             nbr_school.append(len(big_regions))
 
         # Analyse the nbr of school sequence
-        max_start,max_end, nbr_estimate,convergence_value  = convergence_test_new20240730(nbr_school_all)
+        max_start,max_end, nbr_estimate,convergence_value, max_length  = convergence_test_new20240730(nbr_school_all)
         # Plotting nbr_school vs thresh_max
         plt.figure()
         plt.plot(thresh_maxs, nbr_school, marker='o',label = "nbr_school")
@@ -233,6 +233,7 @@ for file in tqdm(files_npy):
 
                 new_row = {'file':file, 
                            'convergence_all':convergence_value,
+                            'max_length': max_length,
                            'nbr_school':nbr_estimate,
                             'mean_c1':best_threshmin_mean1, 
                             'mean_c2':best_threshmin_mean2, 
@@ -249,6 +250,7 @@ for file in tqdm(files_npy):
             else:
                 new_row = {'file':file, 
                            'convergence_all':convergence_value,
+                           'max_length': max_length,
                            'nbr_school':nbr_estimate,
                             'mean_c1':None, 
                             'mean_c2':None, 

@@ -1,8 +1,8 @@
-import run
-import Resize
+#import run
+#import Resize
 import Double_thresholding
 
-run()
-Resize()
+#run()
+#Resize()
 Double_thresholding()
 
